@@ -1,6 +1,8 @@
 import type { ReactNode } from "react";
 import { ButtonLink } from "./button";
+import { IconBack } from "./icons";
 import { cn } from "./cn";
+import { Credits } from "./credits";
 import { LanguageSwitcher } from "@/components/i18n/language-switcher";
 import { TeacherShortcut } from "./teacher-shortcut";
 import { Wordmark } from "./wordmark";
@@ -34,7 +36,10 @@ export function SiteShell({
           <LanguageSwitcher />
         </div>
       </header>
-      <main className={cn(CONTAINER, "flex-1 pt-6 pb-20 sm:pt-10")}>{children}</main>
+      <main className={cn(CONTAINER, "flex-1 pt-6 pb-16 sm:pt-10")}>{children}</main>
+      <footer className={cn(CONTAINER, "pb-6")}>
+        <Credits />
+      </footer>
     </div>
   );
 }
@@ -42,10 +47,7 @@ export function SiteShell({
 /** Back button: same look and position on every page that has one (top left, above the heading). */
 export function BackLink({ href, children }: { href: string; children: ReactNode }) {
   return (
-    <ButtonLink href={href} variant="secondary" size="sm" className="mb-6 pl-2.5">
-      <span aria-hidden className="text-base leading-none">
-        ←
-      </span>
+    <ButtonLink href={href} variant="secondary" size="sm" className="mb-6 pl-2.5" icon={<IconBack />}>
       {children}
     </ButtonLink>
   );

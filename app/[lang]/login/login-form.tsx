@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
-import { Button, Field, Input } from "@/components/ui";
+import { Button, Field, Input, IconSignIn } from "@/components/ui";
 import { useI18n } from "@/components/i18n/provider";
 import { signIn, type SignInState } from "./actions";
 
@@ -47,7 +47,7 @@ export function LoginForm() {
         </p>
       ) : null}
 
-      <Button type="submit" pending={pending} className="w-full">
+      <Button type="submit" pending={pending} className="w-full" icon={<IconSignIn />}>
         {pending ? t.signingIn : t.signIn}
       </Button>
     </form>

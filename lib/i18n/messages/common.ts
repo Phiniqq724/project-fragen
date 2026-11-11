@@ -28,8 +28,6 @@ const en = {
     previewSize: "Preview size",
     laptop: "Laptop",
     phone: "Phone",
-    laptopNote: "Shown at {width}px wide, scaled to fit.",
-    phoneNote: "Shown at {width}px wide, like a phone.",
   },
 };
 
@@ -60,8 +58,6 @@ const de: CommonMessages = {
     previewSize: "Vorschaugröße",
     laptop: "Laptop",
     phone: "Handy",
-    laptopNote: "Angezeigt mit {width} px Breite, passend verkleinert.",
-    phoneNote: "Angezeigt mit {width} px Breite, wie auf einem Handy.",
   },
 };
 
@@ -90,8 +86,6 @@ const id: CommonMessages = {
     previewSize: "Ukuran pratinjau",
     laptop: "Laptop",
     phone: "HP",
-    laptopNote: "Ditampilkan selebar {width}px, diperkecil agar muat.",
-    phoneNote: "Ditampilkan selebar {width}px, seperti di HP.",
   },
 };
 

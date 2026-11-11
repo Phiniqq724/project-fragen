@@ -28,7 +28,7 @@ export function TopicChipButton({
       {...props}
       className={cn(
         "inline-flex min-h-11 items-center rounded-full border-2 border-ink px-4 text-sm font-semibold transition-[background-color,color,transform] duration-150 ease-(--ease-out) active:scale-[0.96] sm:min-h-10",
-        selected ? "bg-ink text-sun" : "bg-surface text-ink hover:bg-sky",
+        selected ? "bg-ink text-sun focus-visible:shadow-[3px_3px_0_var(--accent)]" : "bg-surface text-ink hover:bg-sky focus-visible:bg-sky",
         className,
       )}
     />

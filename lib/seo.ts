@@ -1,15 +1,17 @@
 import { locales, type Locale } from "./i18n/config";
 
+/** The public site. Canonical URLs, sitemap and share cards always point here in production. */
+export const PRODUCTION_URL = "https://fragen.sndyy.id";
+
 /**
  * Public origin used for canonical URLs, hreflang, sitemap and share images.
- * NEXT_PUBLIC_SITE_URL wins (set it once you have a custom domain); on Vercel the
- * production domain is picked up automatically; locally it falls back to :3000.
+ * NEXT_PUBLIC_SITE_URL overrides; any Vercel deployment (production or preview) uses
+ * fragen.sndyy.id so previews never compete with the real site; locally it is :3000.
  */
 export function siteUrl(): string {
   const explicit = process.env.NEXT_PUBLIC_SITE_URL;
   if (explicit) return explicit.replace(/\/$/, "");
-  const vercel = process.env.VERCEL_PROJECT_PRODUCTION_URL;
-  if (vercel) return `https://${vercel}`;
+  if (process.env.VERCEL) return PRODUCTION_URL;
   return "http://localhost:3000";
 }
 

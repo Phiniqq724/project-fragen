@@ -45,6 +45,7 @@ const en = {
     savingChanges: "Saving changes",
     saved: {
       title: "Lesson saved",
+      shareTitle: "Student link",
       copyLink: "Copy link",
       linkCopied: "Link copied",
       published: "Students can open it at",
@@ -181,6 +182,7 @@ const de: AdminMessages = {
     savingChanges: "Änderungen werden gespeichert",
     saved: {
       title: "Lektion gespeichert",
+      shareTitle: "Link für Lernende",
       copyLink: "Link kopieren",
       linkCopied: "Link kopiert",
       published: "Lernende können sie hier öffnen:",
@@ -315,6 +317,7 @@ const id: AdminMessages = {
     savingChanges: "Menyimpan perubahan",
     saved: {
       title: "Pelajaran tersimpan",
+      shareTitle: "Tautan untuk murid",
       copyLink: "Salin tautan",
       linkCopied: "Tautan disalin",
       published: "Murid bisa membukanya di",

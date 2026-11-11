@@ -1,5 +1,5 @@
 import { LocalLink } from "@/components/i18n/link";
-import type { ComponentProps } from "react";
+import type { ComponentProps, ReactNode } from "react";
 import { cn } from "./cn";
 
 type Variant = "primary" | "secondary" | "danger";
@@ -8,6 +8,7 @@ type Size = "md" | "sm";
 // Sticker buttons: ink outline + hard shadow. Hover lifts, press pushes the sticker flat into the page.
 const sticker =
   "border-2 border-ink shadow-hard-sm hover:-translate-x-px hover:-translate-y-px hover:shadow-[4px_4px_0_var(--ink)] " +
+  "focus-visible:-translate-x-px focus-visible:-translate-y-px focus-visible:shadow-[4px_4px_0_var(--accent)] " +
   "active:translate-x-[3px] active:translate-y-[3px] active:shadow-none";
 
 const base =
@@ -35,9 +36,10 @@ export function Button({
   size = "md",
   className,
   pending,
+  icon,
   children,
   ...props
-}: ComponentProps<"button"> & { variant?: Variant; size?: Size; pending?: boolean }) {
+}: ComponentProps<"button"> & { variant?: Variant; size?: Size; pending?: boolean; icon?: ReactNode }) {
   return (
     <button
       {...props}
@@ -45,7 +47,7 @@ export function Button({
       aria-busy={pending || undefined}
       className={buttonClass(variant, size, className)}
     >
-      {pending ? <Spinner /> : null}
+      {pending ? <Spinner /> : icon}
       {children}
     </button>
   );
@@ -55,10 +57,17 @@ export function ButtonLink({
   variant = "primary",
   size = "md",
   className,
+  icon,
+  children,
   ...props
-}: ComponentProps<typeof LocalLink> & { variant?: Variant; size?: Size }) {
+}: ComponentProps<typeof LocalLink> & { variant?: Variant; size?: Size; icon?: ReactNode }) {
   // Internal hrefs get the current language prefix automatically.
-  return <LocalLink {...props} className={buttonClass(variant, size, className)} />;
+  return (
+    <LocalLink {...props} className={buttonClass(variant, size, className)}>
+      {icon}
+      {children}
+    </LocalLink>
+  );
 }
 
 export function Spinner({ className }: { className?: string }) {

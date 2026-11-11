@@ -8,6 +8,7 @@ export const LESSONS_TAG = "lessons";
 export type Lesson = {
   id: string;
   slug: string;
+  code: string;
   title: string;
   description: string | null;
   topic: string | null;
@@ -20,7 +21,7 @@ export type Lesson = {
 };
 
 const LESSON_COLUMNS =
-  "id, slug, title, description, topic, storage_path, file_name, file_size, published, created_at, updated_at";
+  "id, slug, code, title, description, topic, storage_path, file_name, file_size, published, created_at, updated_at";
 
 /** Published lessons, newest first. Cached; admin mutations call updateTag(LESSONS_TAG). */
 export async function getPublishedLessons(): Promise<Lesson[]> {
@@ -65,4 +66,20 @@ export async function getPublishedLessonHtml(slug: string): Promise<string | nul
     .download(lesson.storage_path);
   if (error || !data) throw new Error(`Could not load lesson file: ${error?.message ?? "missing"}`);
   return await data.text();
+}
+
+/** Slug of the published lesson with this short code, or null. */
+export async function getPublishedSlugByCode(code: string): Promise<string | null> {
+  "use cache";
+  cacheTag(LESSONS_TAG);
+  cacheLife("hours");
+
+  const { data, error } = await createPublicClient()
+    .from("lessons")
+    .select("slug")
+    .eq("code", code)
+    .eq("published", true)
+    .maybeSingle();
+  if (error) throw new Error(`Could not resolve short link: ${error.message}`);
+  return data?.slug ?? null;
 }

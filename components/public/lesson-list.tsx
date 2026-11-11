@@ -46,7 +46,7 @@ export function LessonList({ lessons }: { lessons: LessonRow[] }) {
           <li key={l.slug}>
             <LocalLink
               href={`/l/${l.slug}`}
-              className={`sticker block min-h-11 px-5 py-4 transition-[box-shadow,transform] duration-150 ease-(--ease-out) hover:-translate-x-px hover:-translate-y-px hover:shadow-[6px_6px_0_var(--ink)] active:translate-x-[3px] active:translate-y-[3px] active:shadow-none ${STYLES[i % 3]}`}
+              className={`sticker block min-h-11 px-5 py-4 transition-[box-shadow,transform] duration-150 ease-(--ease-out) focus-visible:-translate-x-px focus-visible:-translate-y-px focus-visible:shadow-[6px_6px_0_var(--accent)] hover:-translate-x-px hover:-translate-y-px hover:shadow-[6px_6px_0_var(--ink)] active:translate-x-[3px] active:translate-y-[3px] active:shadow-none ${STYLES[i % 3]}`}
             >
               <div className="flex items-start justify-between gap-3">
                 <h2 className="font-display text-xl font-bold tracking-tight text-ink [overflow-wrap:anywhere] sm:text-2xl">

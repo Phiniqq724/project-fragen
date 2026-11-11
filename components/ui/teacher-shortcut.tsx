@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { createBrowserSupabase } from "@/lib/supabase/browser";
 import { useI18n } from "@/components/i18n/provider";
 import { ButtonLink } from "./button";
+import { IconPanel } from "./icons";
 
 /**
  * Shows "Teacher panel" on student pages, only to a signed-in teacher.
@@ -32,7 +33,7 @@ export function TeacherShortcut() {
 
   if (!signedIn) return null;
   return (
-    <ButtonLink href="/admin" variant="secondary" size="sm">
+    <ButtonLink href="/admin" variant="secondary" size="sm" icon={<IconPanel />}>
       {dict.common.teacherPanel}
     </ButtonLink>
   );

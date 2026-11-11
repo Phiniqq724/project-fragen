@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useI18n } from "@/components/i18n/provider";
-import { fmt } from "@/lib/i18n/config";
 import { LESSON_SANDBOX } from "@/lib/lesson-html";
 import { cn } from "./cn";
 
@@ -10,7 +9,6 @@ type Mode = "fit" | "laptop" | "phone";
 
 /** Width the lesson is laid out at in "Laptop" preview: a common laptop browser window. */
 const LAPTOP_WIDTH = 1280;
-const PHONE_WIDTH = 390;
 
 /**
  * Sticker frame that renders lesson HTML in an opaque-origin sandbox.
@@ -77,18 +75,13 @@ export function LessonFrame({
                 onClick={() => setMode(m)}
                 className={cn(
                   "min-h-10 rounded-full px-4 text-sm font-semibold transition-colors duration-150",
-                  mode === m ? "bg-ink text-sun" : "text-ink hover:bg-sky",
+                  mode === m ? "bg-ink text-sun" : "text-ink hover:bg-sky focus-visible:bg-sky",
                 )}
               >
                 {m === "laptop" ? t.laptop : t.phone}
               </button>
             ))}
           </div>
-          <p className="text-sm text-ink-muted">
-            {mode === "laptop"
-              ? fmt(t.laptopNote, { width: LAPTOP_WIDTH })
-              : fmt(t.phoneNote, { width: PHONE_WIDTH })}
-          </p>
         </div>
       ) : null}
       <div className={cn("relative mx-auto w-full", mode === "phone" && "max-w-[390px]")}>

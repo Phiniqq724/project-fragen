@@ -1,6 +1,8 @@
-export const locales = ["en", "de", "id"] as const;
+// Order = order in the language switcher.
+export const locales = ["de", "en", "id"] as const;
 export type Locale = (typeof locales)[number];
-export const defaultLocale: Locale = "en";
+// German class: every first visit starts in German; the switcher choice is remembered after that.
+export const defaultLocale: Locale = "de";
 
 /** Cookie that remembers the last language a visitor used. Set by proxy.ts. */
 export const LOCALE_COOKIE = "fragen_lang";
@@ -23,8 +25,11 @@ export const dateLocales: Record<Locale, string> = {
   id: "id-ID",
 };
 
+/** Short share codes: 5 characters from an alphabet without look-alikes (see migration 0003). */
+export const SHORT_CODE = /^[2-9a-hjkmnp-z]{5}$/;
+
 /** Paths that are never language-prefixed (served outside app/[lang]). */
-const UNLOCALIZED = /^\/(raw|icon|apple-icon|_next)(\/|\.|\?|$)/;
+const UNLOCALIZED = /^\/(raw|go|icon|apple-icon|_next)(\/|\.|\?|$)/;
 
 /**
  * "/admin" + "de" -> "/de/admin". Leaves alone: external URLs, hash/relative links,
@@ -44,23 +49,6 @@ export function switchLocalePath(pathname: string, locale: Locale): string {
   return parts.join("/").replace(/\/$/, "") || `/${locale}`;
 }
 
-/** Best match for an Accept-Language header, or null. */
-export function matchAcceptLanguage(header: string | null): Locale | null {
-  if (!header) return null;
-  const ranked = header
-    .split(",")
-    .map((part) => {
-      const [tag, q] = part.trim().split(";q=");
-      return { tag: tag.toLowerCase(), q: q ? Number(q) : 1 };
-    })
-    .sort((a, b) => b.q - a.q);
-  for (const { tag } of ranked) {
-    const base = tag.split("-")[0];
-    if (base === "in") return "id"; // legacy code for Indonesian
-    if (hasLocale(base)) return base;
-  }
-  return null;
-}
 
 /** Tiny "{name}" interpolation for message strings. */
 export function fmt(message: string, values: Record<string, string | number>): string {

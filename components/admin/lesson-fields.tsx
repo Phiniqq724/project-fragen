@@ -62,7 +62,7 @@ export function LessonFields({
           aria-describedby="description-hint"
         />
       </Field>
-      <label className="flex min-h-11 cursor-pointer items-start gap-3 rounded-[12px] border-2 border-ink bg-paper px-3.5 py-3 transition-colors duration-150 has-checked:bg-mint">
+      <label className="flex min-h-11 cursor-pointer items-start gap-3 rounded-[12px] border-2 border-ink bg-paper px-3.5 py-3 transition-colors duration-150 has-checked:bg-mint has-focus-visible:shadow-[4px_4px_0_var(--accent)]">
         <input
           type="checkbox"
           name="published"

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { ButtonLink, Notice, PageHeading, TopicChip } from "@/components/ui";
+import { ButtonLink, Notice, PageHeading, TopicChip, IconEdit, IconUpload, IconView } from "@/components/ui";
 import { formatDay as formatShortDate, formatDayLong as formatLongDate } from "@/lib/format";
 import { requireTeacher } from "@/lib/auth";
 import { getDictionary } from "@/lib/i18n/dictionary";
@@ -32,7 +32,7 @@ export default async function AdminPage() {
           </>
         }
         lead={t.lead}
-        actions={<ButtonLink href="/admin/new">{admin.uploadLesson}</ButtonLink>}
+        actions={<ButtonLink href="/admin/new" icon={<IconUpload />}>{admin.uploadLesson}</ButtonLink>}
       />
       <Suspense fallback={<ListSkeleton />}>
         <LessonRows />
@@ -62,7 +62,7 @@ async function LessonRows() {
   const t = admin.list;
   const { data, error } = await supabase
     .from("lessons")
-    .select("id, slug, title, topic, published, file_size, created_at")
+    .select("id, slug, code, title, topic, published, file_size, created_at")
     .order("created_at", { ascending: false });
 
   if (error) {
@@ -72,13 +72,13 @@ async function LessonRows() {
       </Notice>
     );
   }
-  const lessons = (data ?? []) as Pick<Lesson, "id" | "slug" | "title" | "topic" | "published" | "file_size" | "created_at">[];
+  const lessons = (data ?? []) as Pick<Lesson, "id" | "slug" | "code" | "title" | "topic" | "published" | "file_size" | "created_at">[];
 
   if (lessons.length === 0) {
     return (
       <Notice
         title={t.empty.title}
-        action={<ButtonLink href="/admin/new">{admin.uploadFirst}</ButtonLink>}
+        action={<ButtonLink href="/admin/new" icon={<IconUpload />}>{admin.uploadFirst}</ButtonLink>}
       >
         {t.empty.body}
       </Notice>
@@ -107,14 +107,15 @@ async function LessonRows() {
                 {formatShortDate(l.created_at, locale)}
               </time>
               <span>{formatSize(l.file_size)}</span>
+              {l.published ? <span className="font-mono text-ink">/{l.code}</span> : null}
             </p>
           </div>
           <div className="flex shrink-0 gap-3">
-            <ButtonLink href={`/admin/${l.id}`} variant="secondary" size="sm">
+            <ButtonLink href={`/admin/${l.id}`} variant="secondary" size="sm" icon={<IconEdit />}>
               {t.edit}<span className="sr-only"> {l.title}</span>
             </ButtonLink>
             {l.published ? (
-              <ButtonLink href={`/l/${l.slug}`} variant="secondary" size="sm">
+              <ButtonLink href={`/l/${l.slug}`} variant="secondary" size="sm" icon={<IconView />}>
                 {t.view}<span className="sr-only"> {l.title}</span>
               </ButtonLink>
             ) : null}

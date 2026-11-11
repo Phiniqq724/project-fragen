@@ -73,10 +73,12 @@
     text-wrap: pretty;
   }
 
-  /* Ink focus ring for keyboard users. Inside a layer so components can override it. */
+  /*
+   * Owner decision: no outline rings. Keyboard focus is shown per component with the
+   * same tomato hard shadow inputs use (buttons, cards) or the hover fill (pills).
+   */
   :focus-visible {
-    outline: 2.5px solid var(--ink);
-    outline-offset: 3px;
+    outline: none;
   }
 }
 

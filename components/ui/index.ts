@@ -7,3 +7,4 @@ export { Notice } from "./notice";
 export { LessonFrame } from "./lesson-frame";
 export { GridBackdrop } from "./grid-backdrop";
 export { SiteShell, PageHeading, BackLink, StickerTitle, CONTAINER } from "./shell";
+export * from "./icons";

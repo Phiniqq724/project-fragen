@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { buttonClass, cn } from "@/components/ui";
+import { buttonClass, cn, IconFile } from "@/components/ui";
 import { useI18n } from "@/components/i18n/provider";
 import { checkLessonFile } from "@/lib/lesson-html";
 
@@ -72,8 +72,9 @@ export function FileDrop({
       />
       <label
         htmlFor={id}
-        className={buttonClass("secondary", "md", "cursor-pointer")}
+        className={buttonClass("secondary", "md", "cursor-pointer peer-focus-visible:-translate-y-px peer-focus-visible:shadow-[4px_4px_0_var(--accent)]")}
       >
+        <IconFile />
         {fileName ? t.chooseAnother : t.chooseFile}
       </label>
     </div>

@@ -3,9 +3,9 @@ import { cn } from "./cn";
 
 const control =
   "w-full rounded-[12px] border-2 border-ink bg-surface px-3.5 text-base text-ink " +
-  "placeholder:text-ink-muted transition-[box-shadow,background-color,border-color] duration-150 ease-(--ease-out) " +
-  // Focus = border and hard shadow turn tomato. Never a separate outline ring.
-  "focus:border-accent focus:bg-white focus:shadow-hard-accent focus:outline-none focus-visible:outline-none " +
+  "placeholder:text-ink-muted transition-[box-shadow,background-color] duration-150 ease-(--ease-out) " +
+  // Focus = border stays ink, only the hard shadow turns tomato. Never a separate outline ring.
+  "focus:bg-white focus:shadow-hard-accent focus:outline-none focus-visible:outline-none " +
   "aria-invalid:border-danger aria-invalid:bg-danger-soft disabled:opacity-60";
 
 /** Label above, hint below, error below that (caller wires aria-describedby to `${id}-hint` / `${id}-error`). */

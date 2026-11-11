@@ -1,8 +1,9 @@
 # Fragen
 
-Lessons for our Deutsch class. A teacher uploads single-file HTML lessons; students open them by link on any phone or laptop, without downloading anything.
+Live at **https://fragen.sndyy.id**. Lessons for our Deutsch class. A teacher uploads single-file HTML lessons; students open them by link on any phone or laptop, without downloading anything.
 
-- Student pages: `/en`, `/de`, `/id` (language picked from the last choice, then the browser, then English). Shared lesson links look like `/l/<slug>` and open in each student's language.
+- Student pages: `/de`, `/en`, `/id`. First visits start in German; the switcher choice is remembered.
+- Share links are short: `fragen.sndyy.id/k3x9q` (5-character code per lesson). They open the full lesson page (`/de/l/<slug>`) in each student's language.
 - Teacher panel: `/login` → `/admin` (upload with live preview, edit, hide, replace file, delete).
 - Lesson files run in a sandbox (`/raw/<slug>`), so they cannot touch the site or a teacher's session.
 
@@ -10,7 +11,7 @@ Stack: Next.js 16 (App Router, Cache Components), Supabase (Postgres, Storage, A
 
 ## Setup
 
-1. Create a Supabase project and run `supabase/migrations/0001_init.sql` in its SQL editor.
+1. Create a Supabase project and run every file in `supabase/migrations/` in order (0001, 0002, 0003) in its SQL editor.
 2. In Supabase, **Authentication → Sign In / Providers**: turn off "Allow new users to sign up".
 3. **Authentication → Users → Add user** for each teacher (tick "Auto confirm").
 4. Copy `.env.example` to `.env.local` and fill in the project URL and publishable key (Project settings → API).
@@ -18,7 +19,7 @@ Stack: Next.js 16 (App Router, Cache Components), Supabase (Postgres, Storage, A
 
 ## Deploy (Vercel)
 
-Import the repository, add the two environment variables from `.env.example` (`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`), and deploy. If you add a custom domain, also set `NEXT_PUBLIC_SITE_URL` so canonical links, the sitemap and share images use it.
+Import the repository, add the two environment variables from `.env.example` (`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`), and deploy. Add `fragen.sndyy.id` under Vercel → Settings → Domains. Canonical links, the sitemap and share images already point there; `NEXT_PUBLIC_SITE_URL` can override it.
 
 ## SEO
 

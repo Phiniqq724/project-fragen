@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState, useEffect, useRef, useState, useSyncExternalStore, useTransition } from "react";
-import { Button, LessonFrame, Notice, PageHeading } from "@/components/ui";
+import { Button, LessonFrame, Notice, PageHeading, IconCheck, IconClose, IconCopy, IconReplace, IconTrash } from "@/components/ui";
 import { FileDrop } from "@/components/admin/file-drop";
 import { LessonFields } from "@/components/admin/lesson-fields";
 import { useI18n } from "@/components/i18n/provider";
@@ -49,9 +49,9 @@ export function EditLesson({ lesson, srcDoc, saved }: { lesson: Lesson; srcDoc: 
         }
         lead={<span className="font-semibold text-ink">{lesson.title}</span>}
       />
-      {saved ? <SavedNotice lesson={lesson} /> : null}
+      <ShareNotice lesson={lesson} saved={saved} />
 
-      <section aria-labelledby="preview-heading" className={`${saved ? "mt-10" : ""} flex flex-col gap-3`}>
+      <section aria-labelledby="preview-heading" className="mt-10 flex flex-col gap-3">
         <h2 id="preview-heading" className="font-display text-xl font-bold">
           {t.currentFile}
         </h2>
@@ -84,7 +84,7 @@ export function EditLesson({ lesson, srcDoc, saved }: { lesson: Lesson; srcDoc: 
           </p>
         ) : null}
         <div>
-          <Button type="submit" pending={pending}>
+          <Button type="submit" pending={pending} icon={<IconCheck />}>
             {pending ? t.savingChanges : t.saveChanges}
           </Button>
         </div>
@@ -96,7 +96,8 @@ export function EditLesson({ lesson, srcDoc, saved }: { lesson: Lesson; srcDoc: 
   );
 }
 
-function SavedNotice({ lesson }: { lesson: Lesson }) {
+/** Short student link (fragen.sndyy.id/k3x9q) with a copy button. Success style right after saving. */
+function ShareNotice({ lesson, saved }: { lesson: Lesson; saved: boolean }) {
   const { dict } = useI18n();
   const t = dict.admin.edit.saved;
   const [copied, setCopied] = useState(false);
@@ -105,8 +106,9 @@ function SavedNotice({ lesson }: { lesson: Lesson }) {
     () => window.location.origin,
     () => "",
   );
-  // Deliberately no language prefix: each student opens the link in their own language.
-  const url = `${origin}/l/${lesson.slug}`;
+  // Short code, no language prefix: each student opens the link in their own language.
+  const url = `${origin}/${lesson.code}`;
+  const shown = url.replace(/^https?:\/\//, "");
 
   async function copy() {
     try {
@@ -120,11 +122,11 @@ function SavedNotice({ lesson }: { lesson: Lesson }) {
 
   return (
     <Notice
-      tone="success"
-      title={t.title}
+      tone={saved ? "success" : "info"}
+      title={saved ? t.title : t.shareTitle}
       action={
         lesson.published ? (
-          <Button type="button" variant="secondary" size="sm" onClick={copy}>
+          <Button type="button" variant="secondary" size="sm" onClick={copy} icon={copied ? <IconCheck /> : <IconCopy />}>
             {copied ? t.linkCopied : t.copyLink}
           </Button>
         ) : null
@@ -132,7 +134,7 @@ function SavedNotice({ lesson }: { lesson: Lesson }) {
     >
       {lesson.published ? (
         <p>
-          {t.published} <span className="font-semibold break-all text-ink">{url}</span>
+          {t.published} <span className="font-semibold break-all text-ink">{shown}</span>
         </p>
       ) : (
         <p>{t.hidden}</p>
@@ -193,7 +195,7 @@ function ReplaceFile({ lesson }: { lesson: Lesson }) {
         <>
           <LessonFrame srcDoc={srcDoc} showDeviceToggle title={t.previewTitle} />
           <div className="flex flex-wrap gap-3">
-            <Button type="button" onClick={save} pending={pending}>
+            <Button type="button" onClick={save} pending={pending} icon={<IconReplace />}>
               {pending ? t.replacing : t.button}
             </Button>
             <Button
@@ -205,6 +207,7 @@ function ReplaceFile({ lesson }: { lesson: Lesson }) {
                 setSrcDoc(null);
               }}
             >
+              <IconClose />
               {t.discard}
             </Button>
           </div>
@@ -226,7 +229,7 @@ function DeleteLesson({ lesson }: { lesson: Lesson }) {
         {t.heading}
       </h2>
       <p className="mt-1 text-sm text-ink-muted">{t.hint}</p>
-      <Button type="button" variant="danger" className="mt-4" onClick={() => dialog.current?.showModal()}>
+      <Button type="button" variant="danger" className="mt-4" onClick={() => dialog.current?.showModal()} icon={<IconTrash />}>
         {t.button}
       </Button>
 
@@ -253,10 +256,10 @@ function DeleteLesson({ lesson }: { lesson: Lesson }) {
             </p>
           ) : null}
           <div className="flex flex-wrap justify-end gap-3">
-            <Button type="button" variant="secondary" onClick={() => dialog.current?.close()}>
+            <Button type="button" variant="secondary" onClick={() => dialog.current?.close()} icon={<IconClose />}>
               {t.keep}
             </Button>
-            <Button type="submit" variant="danger" pending={pending}>
+            <Button type="submit" variant="danger" pending={pending} icon={<IconTrash />}>
               {pending ? t.deleting : t.button}
             </Button>
           </div>

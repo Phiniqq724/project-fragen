@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import { BackLink, ButtonLink, LessonFrame, Notice, SiteShell, TopicChip } from "@/components/ui";
+import { BackLink, ButtonLink, LessonFrame, Notice, SiteShell, TopicChip, IconExpand } from "@/components/ui";
 import { formatDayLong } from "@/lib/format";
 import { getDictionary } from "@/lib/i18n/dictionary";
 import { getPublishedLessonBySlug } from "@/lib/lessons";
@@ -88,11 +88,8 @@ async function Lesson({ params }: { params: PageProps<"/[lang]/l/[slug]">["param
           {lesson.topic ? <TopicChip>{lesson.topic}</TopicChip> : null}
           <time dateTime={lesson.created_at}>{formatDayLong(lesson.created_at, locale)}</time>
         </p>
-        <ButtonLink href={src} target="_blank" rel="noopener" size="sm">
+        <ButtonLink href={src} target="_blank" rel="noopener" size="sm" icon={<IconExpand />}>
           {t.openFullScreen}
-          <span aria-hidden className="text-base leading-none">
-            ↗
-          </span>
         </ButtonLink>
       </div>
       <LessonFrame title={lesson.title} src={src} />

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useTransition } from "react";
-import { Button, ButtonLink, LessonFrame, Notice, PageHeading } from "@/components/ui";
+import { Button, ButtonLink, LessonFrame, Notice, PageHeading, IconCheck, IconClose } from "@/components/ui";
 import { FileDrop } from "@/components/admin/file-drop";
 import { LessonFields } from "@/components/admin/lesson-fields";
 import { useI18n } from "@/components/i18n/provider";
@@ -156,10 +156,10 @@ export default function NewLessonPage() {
         ) : null}
 
         <div className="flex flex-wrap gap-3">
-          <Button type="submit" pending={pending}>
+          <Button type="submit" pending={pending} icon={<IconCheck />}>
             {pending ? t.saving : t.save}
           </Button>
-          <ButtonLink href="/admin" variant="secondary">
+          <ButtonLink href="/admin" variant="secondary" icon={<IconClose />}>
             {t.cancel}
           </ButtonLink>
         </div>

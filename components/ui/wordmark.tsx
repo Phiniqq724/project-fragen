@@ -17,7 +17,7 @@ export function Wordmark({ href = "/", suffix, className }: { href?: string; suf
         Fragen
         <span
           aria-hidden
-          className="ml-1 inline-grid h-[26px] w-6 rotate-[8deg] place-items-center rounded-[8px] border-2 border-ink bg-accent text-[19px] text-accent-ink shadow-[2px_2px_0_var(--ink)] transition-transform duration-200 ease-(--ease-out) group-hover:rotate-[-6deg]"
+          className="ml-1 inline-grid h-[26px] w-6 rotate-[8deg] place-items-center rounded-[8px] border-2 border-ink bg-accent text-[19px] text-accent-ink shadow-[2px_2px_0_var(--ink)] transition-transform duration-200 ease-(--ease-out) group-hover:rotate-[-6deg] group-focus-visible:rotate-[-6deg] group-focus-visible:bg-ink"
         >
           ?
         </span>

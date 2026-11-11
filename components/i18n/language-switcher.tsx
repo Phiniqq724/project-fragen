@@ -39,7 +39,7 @@ function Pill({ hrefFor }: { hrefFor: (locale: Locale) => string }) {
           aria-current={l === locale ? "true" : undefined}
           className={cn(
             "inline-grid min-h-10 min-w-10 place-items-center rounded-full px-2 text-xs font-bold uppercase transition-colors duration-150",
-            l === locale ? "bg-ink text-sun" : "text-ink hover:bg-sky",
+            l === locale ? "bg-ink text-sun" : "text-ink hover:bg-sky focus-visible:bg-sky",
           )}
         >
           {l}

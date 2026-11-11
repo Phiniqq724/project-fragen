@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { ButtonLink, SiteShell, buttonClass } from "@/components/ui";
+import { ButtonLink, SiteShell, buttonClass, IconView, IconSignOut } from "@/components/ui";
 import { requireTeacher } from "@/lib/auth";
 import { getDictionary } from "@/lib/i18n/dictionary";
 import { signOut } from "./actions";
@@ -23,18 +23,17 @@ export default async function AdminLayout({ children }: LayoutProps<"/[lang]/adm
 
 /** Reads the session cookie, so it streams in behind Suspense. */
 async function Account() {
-  const { teacher } = await requireTeacher();
+  // Still checks the session; the email itself is no longer shown.
+  await requireTeacher();
   const { admin } = await getDictionary();
   return (
     <>
-      <p className="hidden max-w-56 truncate text-sm font-semibold text-ink-muted md:block" title={teacher.email}>
-        {teacher.email}
-      </p>
-      <ButtonLink href="/" variant="secondary" size="sm">
+      <ButtonLink href="/" variant="secondary" size="sm" icon={<IconView />}>
         {admin.viewSite}
       </ButtonLink>
       <form action={signOut}>
-        <button type="submit" className={buttonClass("secondary", "sm")}>
+        <button type="submit" className={buttonClass("primary", "sm")}>
+          <IconSignOut />
           {admin.signOut}
         </button>
       </form>
