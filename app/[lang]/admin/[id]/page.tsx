@@ -5,7 +5,7 @@ import { requireTeacher } from "@/lib/auth";
 import { prepareLessonHtml } from "@/lib/lesson-html";
 import { LESSON_BUCKET } from "@/lib/supabase/env";
 import type { Lesson } from "@/lib/lessons";
-import { Notice } from "@/components/ui";
+import { Notice, Loader } from "@/components/ui";
 import { getDictionary } from "@/lib/i18n/dictionary";
 import { EditLesson } from "./edit-lesson";
 
@@ -17,13 +17,13 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function EditPage({ params, searchParams }: PageProps<"/[lang]/admin/[id]">) {
   const { admin } = await getDictionary();
   return (
-    <Suspense fallback={<p className="text-ink-muted">{admin.loadingLesson}</p>}>
-      <Loader params={params} searchParams={searchParams} />
+    <Suspense fallback={<Loader label={admin.loadingLesson} />}>
+      <LessonLoader params={params} searchParams={searchParams} />
     </Suspense>
   );
 }
 
-async function Loader({
+async function LessonLoader({
   params,
   searchParams,
 }: {

@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import { ButtonLink, Notice, PageHeading, TopicChip, IconEdit, IconUpload, IconView } from "@/components/ui";
 import { formatDay as formatShortDate, formatDayLong as formatLongDate } from "@/lib/format";
 import { requireTeacher } from "@/lib/auth";
+import { CopyLinkButton } from "@/components/admin/copy-link-button";
 import { getDictionary } from "@/lib/i18n/dictionary";
 import type { Lesson } from "@/lib/lessons";
 
@@ -11,9 +12,6 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: admin.list.title, robots: { index: false } };
 }
 
-function formatSize(bytes: number) {
-  return bytes < 1024 * 1024 ? `${Math.max(1, Math.round(bytes / 1024))} KB` : `${(bytes / 1024 / 1024).toFixed(1)} MB`;
-}
 
 // Alternating fills with a tiny static tilt, same as the student list.
 const STYLES = ["bg-surface", "bg-sky rotate-[0.6deg]", "bg-pink -rotate-[0.5deg]"];
@@ -62,7 +60,7 @@ async function LessonRows() {
   const t = admin.list;
   const { data, error } = await supabase
     .from("lessons")
-    .select("id, slug, code, title, topic, published, file_size, created_at")
+    .select("id, slug, code, title, topic, published, created_at")
     .order("created_at", { ascending: false });
 
   if (error) {
@@ -72,7 +70,7 @@ async function LessonRows() {
       </Notice>
     );
   }
-  const lessons = (data ?? []) as Pick<Lesson, "id" | "slug" | "code" | "title" | "topic" | "published" | "file_size" | "created_at">[];
+  const lessons = (data ?? []) as Pick<Lesson, "id" | "slug" | "code" | "title" | "topic" | "published" | "created_at">[];
 
   if (lessons.length === 0) {
     return (
@@ -106,11 +104,10 @@ async function LessonRows() {
               <time dateTime={l.created_at} title={formatLongDate(l.created_at, locale)}>
                 {formatShortDate(l.created_at, locale)}
               </time>
-              <span>{formatSize(l.file_size)}</span>
-              {l.published ? <span className="font-mono text-ink">/{l.code}</span> : null}
             </p>
           </div>
           <div className="flex shrink-0 gap-3">
+            {l.published ? <CopyLinkButton code={l.code} lessonTitle={l.title} iconOnly /> : null}
             <ButtonLink href={`/admin/${l.id}`} variant="secondary" size="sm" icon={<IconEdit />}>
               {t.edit}<span className="sr-only"> {l.title}</span>
             </ButtonLink>

@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { ButtonLink, SiteShell, buttonClass, IconView, IconSignOut } from "@/components/ui";
+import { ButtonLink, SiteShell, buttonClass, IconView, IconSignOut, Loader } from "@/components/ui";
 import { requireTeacher } from "@/lib/auth";
 import { getDictionary } from "@/lib/i18n/dictionary";
 import { signOut } from "./actions";
@@ -16,7 +16,7 @@ export default async function AdminLayout({ children }: LayoutProps<"/[lang]/adm
         </Suspense>
       }
     >
-      <Suspense fallback={<p className="text-ink-muted">{admin.loading}</p>}>{children}</Suspense>
+      <Suspense fallback={<Loader label={admin.loading} />}>{children}</Suspense>
     </SiteShell>
   );
 }

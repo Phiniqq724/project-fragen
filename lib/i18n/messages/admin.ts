@@ -45,10 +45,8 @@ const en = {
     savingChanges: "Saving changes",
     saved: {
       title: "Lesson saved",
-      shareTitle: "Student link",
       copyLink: "Copy link",
       linkCopied: "Link copied",
-      published: "Students can open it at",
       hidden: "This lesson is hidden, so students cannot open it yet. Turn on Published below to share it.",
     },
     replace: {
@@ -182,10 +180,8 @@ const de: AdminMessages = {
     savingChanges: "Änderungen werden gespeichert",
     saved: {
       title: "Lektion gespeichert",
-      shareTitle: "Link für Lernende",
       copyLink: "Link kopieren",
       linkCopied: "Link kopiert",
-      published: "Lernende können sie hier öffnen:",
       hidden: "Diese Lektion ist versteckt, deshalb können Lernende sie noch nicht öffnen. Aktiviere unten „Veröffentlicht“, um sie zu teilen.",
     },
     replace: {
@@ -317,10 +313,8 @@ const id: AdminMessages = {
     savingChanges: "Menyimpan perubahan",
     saved: {
       title: "Pelajaran tersimpan",
-      shareTitle: "Tautan untuk murid",
       copyLink: "Salin tautan",
       linkCopied: "Tautan disalin",
-      published: "Murid bisa membukanya di",
       hidden: "Pelajaran ini tersembunyi, jadi murid belum bisa membukanya. Aktifkan Diterbitkan di bawah untuk membagikannya.",
     },
     replace: {

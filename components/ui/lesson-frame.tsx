@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useI18n } from "@/components/i18n/provider";
 import { LESSON_SANDBOX } from "@/lib/lesson-html";
 import { cn } from "./cn";
+import { Loader } from "./loader";
 
 type Mode = "fit" | "laptop" | "phone";
 
@@ -92,11 +93,7 @@ export function LessonFrame({
             mode === "phone" ? "h-[720px] max-h-[75dvh]" : "h-[min(78dvh,900px)] min-h-[420px]",
           )}
         >
-          {!loaded ? (
-            <div className="absolute inset-0 grid place-items-center bg-surface text-sm text-ink-muted" aria-hidden>
-              {t.loading}
-            </div>
-          ) : null}
+          {!loaded ? <Loader label={t.loading} className="absolute inset-0 z-10 bg-surface py-0" /> : null}
           <iframe
             key={src ?? srcDoc?.length}
             title={title}

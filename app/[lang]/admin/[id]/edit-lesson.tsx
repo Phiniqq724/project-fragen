@@ -1,7 +1,8 @@
 "use client";
 
-import { useActionState, useEffect, useRef, useState, useSyncExternalStore, useTransition } from "react";
-import { Button, LessonFrame, Notice, PageHeading, IconCheck, IconClose, IconCopy, IconReplace, IconTrash } from "@/components/ui";
+import { useActionState, useEffect, useRef, useState, useTransition } from "react";
+import { Button, LessonFrame, Notice, PageHeading, IconCheck, IconClose, IconReplace, IconTrash } from "@/components/ui";
+import { CopyLinkButton } from "@/components/admin/copy-link-button";
 import { FileDrop } from "@/components/admin/file-drop";
 import { LessonFields } from "@/components/admin/lesson-fields";
 import { useI18n } from "@/components/i18n/provider";
@@ -48,10 +49,15 @@ export function EditLesson({ lesson, srcDoc, saved }: { lesson: Lesson; srcDoc: 
           </>
         }
         lead={<span className="font-semibold text-ink">{lesson.title}</span>}
+        actions={lesson.published ? <CopyLinkButton code={lesson.code} lessonTitle={lesson.title} /> : null}
       />
-      <ShareNotice lesson={lesson} saved={saved} />
+      {saved ? (
+        <Notice tone="success" title={t.saved.title}>
+          {lesson.published ? null : <p>{t.saved.hidden}</p>}
+        </Notice>
+      ) : null}
 
-      <section aria-labelledby="preview-heading" className="mt-10 flex flex-col gap-3">
+      <section aria-labelledby="preview-heading" className={`${saved ? "mt-10" : ""} flex flex-col gap-3`}>
         <h2 id="preview-heading" className="font-display text-xl font-bold">
           {t.currentFile}
         </h2>
@@ -96,52 +102,6 @@ export function EditLesson({ lesson, srcDoc, saved }: { lesson: Lesson; srcDoc: 
   );
 }
 
-/** Short student link (fragen.sndyy.id/k3x9q) with a copy button. Success style right after saving. */
-function ShareNotice({ lesson, saved }: { lesson: Lesson; saved: boolean }) {
-  const { dict } = useI18n();
-  const t = dict.admin.edit.saved;
-  const [copied, setCopied] = useState(false);
-  const origin = useSyncExternalStore(
-    () => () => {},
-    () => window.location.origin,
-    () => "",
-  );
-  // Short code, no language prefix: each student opens the link in their own language.
-  const url = `${origin}/${lesson.code}`;
-  const shown = url.replace(/^https?:\/\//, "");
-
-  async function copy() {
-    try {
-      await navigator.clipboard.writeText(url);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      setCopied(false);
-    }
-  }
-
-  return (
-    <Notice
-      tone={saved ? "success" : "info"}
-      title={saved ? t.title : t.shareTitle}
-      action={
-        lesson.published ? (
-          <Button type="button" variant="secondary" size="sm" onClick={copy} icon={copied ? <IconCheck /> : <IconCopy />}>
-            {copied ? t.linkCopied : t.copyLink}
-          </Button>
-        ) : null
-      }
-    >
-      {lesson.published ? (
-        <p>
-          {t.published} <span className="font-semibold break-all text-ink">{shown}</span>
-        </p>
-      ) : (
-        <p>{t.hidden}</p>
-      )}
-    </Notice>
-  );
-}
 
 function ReplaceFile({ lesson }: { lesson: Lesson }) {
   const { dict } = useI18n();
