@@ -1,0 +1,83 @@
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { Suspense } from "react";
+import { BackLink, ButtonLink, LessonFrame, Notice, SiteShell, TopicChip } from "@/components/ui";
+import { formatDayLong } from "@/lib/format";
+import { getDictionary } from "@/lib/i18n/dictionary";
+import { getPublishedLessonBySlug } from "@/lib/lessons";
+import { isSupabaseConfigured } from "@/lib/supabase/env";
+
+export async function generateMetadata({ params }: PageProps<"/[lang]/l/[slug]">): Promise<Metadata> {
+  const [{ slug }, { public: t }] = await Promise.all([params, getDictionary()]);
+  if (!isSupabaseConfigured()) return { title: t.lessonTitleFallback };
+  try {
+    const lesson = await getPublishedLessonBySlug(slug);
+    return lesson
+      ? { title: lesson.title, description: lesson.description ?? undefined }
+      : { title: t.lessonNotFoundTitle };
+  } catch {
+    return { title: t.lessonTitleFallback };
+  }
+}
+
+async function Lesson({ params }: { params: PageProps<"/[lang]/l/[slug]">["params"] }) {
+  const [{ slug }, { common, public: t, locale }] = await Promise.all([params, getDictionary()]);
+  if (!isSupabaseConfigured()) {
+    return <Notice title={common.notConnected.title}>{common.notConnected.body}</Notice>;
+  }
+  const lesson = await getPublishedLessonBySlug(slug);
+  if (!lesson) notFound();
+
+  const src = `/raw/${encodeURIComponent(lesson.slug)}`;
+  return (
+    <>
+      <h1 className="font-display text-4xl leading-[1.02] font-extrabold tracking-tight [overflow-wrap:anywhere] sm:text-5xl">
+        {lesson.title}
+      </h1>
+      {lesson.description ? (
+        <p className="mt-4 max-w-prose text-base text-ink-muted [overflow-wrap:anywhere]">{lesson.description}</p>
+      ) : null}
+
+      {/* Toolbar sits directly on top of the lesson: meta left, full screen right. */}
+      <div className="mt-8 mb-4 flex flex-wrap items-center justify-between gap-3">
+        <p className="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm font-semibold text-ink">
+          {lesson.topic ? <TopicChip>{lesson.topic}</TopicChip> : null}
+          <time dateTime={lesson.created_at}>{formatDayLong(lesson.created_at, locale)}</time>
+        </p>
+        <ButtonLink href={src} target="_blank" rel="noopener" size="sm">
+          {t.openFullScreen}
+          <span aria-hidden className="text-base leading-none">
+            ↗
+          </span>
+        </ButtonLink>
+      </div>
+      <LessonFrame title={lesson.title} src={src} />
+    </>
+  );
+}
+
+function LessonSkeleton({ label }: { label: string }) {
+  return (
+    <div aria-hidden>
+      <div className="h-11 w-2/3 rounded-[8px] bg-ink/10" />
+      <div className="mt-8 mb-4 flex justify-between">
+        <div className="h-7 w-40 rounded-full bg-ink/10" />
+        <div className="h-10 w-40 rounded-[12px] bg-ink/10" />
+      </div>
+      <div className="sticker h-[60dvh]" />
+      <span className="sr-only">{label}</span>
+    </div>
+  );
+}
+
+export default async function LessonPage(props: PageProps<"/[lang]/l/[slug]">) {
+  const { common } = await getDictionary();
+  return (
+    <SiteShell>
+      <BackLink href="/">{common.allLessons}</BackLink>
+      <Suspense fallback={<LessonSkeleton label={common.frame.loading} />}>
+        <Lesson params={props.params} />
+      </Suspense>
+    </SiteShell>
+  );
+}
