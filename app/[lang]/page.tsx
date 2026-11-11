@@ -1,9 +1,21 @@
+import type { Metadata } from "next";
 import { Suspense } from "react";
 import { Notice, PageHeading, SiteShell, StickerTitle } from "@/components/ui";
 import { LessonList, LessonListSkeleton, type LessonRow } from "@/components/public/lesson-list";
 import { getDictionary } from "@/lib/i18n/dictionary";
 import { getPublishedLessons } from "@/lib/lessons";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
+import { alternatesFor, jsonLd, ogBase, siteUrl } from "@/lib/seo";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const { common, public: t, locale } = await getDictionary();
+  return {
+    title: { absolute: t.seo.homeTitle },
+    description: common.tagline,
+    alternates: alternatesFor(locale, "/"),
+    openGraph: { ...ogBase(locale), type: "website", title: t.seo.homeTitle, description: common.tagline, url: `/${locale}` },
+  };
+}
 
 async function Lessons() {
   const { common, public: t } = await getDictionary();
@@ -35,9 +47,20 @@ async function Lessons() {
 }
 
 export default async function Home() {
-  const { public: t } = await getDictionary();
+  const { common, public: t, locale } = await getDictionary();
   return (
     <SiteShell>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={jsonLd({
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: "Fragen",
+          url: `${siteUrl()}/${locale}`,
+          inLanguage: locale,
+          description: common.tagline,
+        })}
+      />
       <PageHeading title={<StickerTitle heading={t.home.heading} />} lead={t.home.lead} />
       <Suspense fallback={<LessonListSkeleton label={t.loadingLessons} />}>
         <Lessons />

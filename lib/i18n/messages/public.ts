@@ -17,6 +17,13 @@ const en = {
   openFullScreen: "Open full screen",
   lessonTitleFallback: "Lesson",
   lessonNotFoundTitle: "Lesson not found",
+  seo: {
+    homeTitle: "Fragen · Deutsch lessons for our class",
+    lessonDescription: "A Deutsch lesson from our class. Opens right in the browser on any phone or laptop.",
+    cardEyebrow: "Deutsch lesson",
+    cardFooter: "Open it on any phone or laptop",
+    siteCardTitle: "Deutsch lessons that open on any phone",
+  },
 };
 
 export type PublicMessages = typeof en;
@@ -40,6 +47,13 @@ const de: PublicMessages = {
   openFullScreen: "Vollbild öffnen",
   lessonTitleFallback: "Lektion",
   lessonNotFoundTitle: "Lektion nicht gefunden",
+  seo: {
+    homeTitle: "Fragen · Deutschlektionen für unseren Kurs",
+    lessonDescription: "Eine Deutschlektion aus unserem Kurs. Öffnet sich direkt im Browser, auf jedem Handy oder Laptop.",
+    cardEyebrow: "Deutschlektion",
+    cardFooter: "Auf jedem Handy oder Laptop öffnen",
+    siteCardTitle: "Deutschlektionen, die auf jedem Handy laufen",
+  },
 };
 
 const id: PublicMessages = {
@@ -58,6 +72,13 @@ const id: PublicMessages = {
   openFullScreen: "Buka layar penuh",
   lessonTitleFallback: "Pelajaran",
   lessonNotFoundTitle: "Pelajaran tidak ditemukan",
+  seo: {
+    homeTitle: "Fragen · Pelajaran bahasa Jerman untuk kelas kita",
+    lessonDescription: "Pelajaran bahasa Jerman dari kelas kita. Langsung terbuka di browser, di HP atau laptop mana pun.",
+    cardEyebrow: "Pelajaran bahasa Jerman",
+    cardFooter: "Buka di HP atau laptop mana pun",
+    siteCardTitle: "Pelajaran bahasa Jerman yang bisa dibuka di HP mana pun",
+  },
 };
 
 export const publicMessages: Record<Locale, PublicMessages> = { en, de, id };

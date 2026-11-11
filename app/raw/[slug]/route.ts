@@ -20,6 +20,8 @@ export async function GET(_request: Request, ctx: RouteContext<"/raw/[slug]">) {
       "Content-Security-Policy": `sandbox ${LESSON_SANDBOX}`,
       "X-Content-Type-Options": "nosniff",
       "Referrer-Policy": "no-referrer",
+      // The lesson page (/<lang>/l/<slug>) is the indexable URL; the raw file is not.
+      "X-Robots-Tag": "noindex",
       "Cache-Control": "public, max-age=60, stale-while-revalidate=300",
     },
   });

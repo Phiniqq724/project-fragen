@@ -6,15 +6,30 @@ import { formatDayLong } from "@/lib/format";
 import { getDictionary } from "@/lib/i18n/dictionary";
 import { getPublishedLessonBySlug } from "@/lib/lessons";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
+import { alternatesFor, jsonLd, ogBase, siteUrl } from "@/lib/seo";
 
 export async function generateMetadata({ params }: PageProps<"/[lang]/l/[slug]">): Promise<Metadata> {
-  const [{ slug }, { public: t }] = await Promise.all([params, getDictionary()]);
+  const [{ slug }, { public: t, locale }] = await Promise.all([params, getDictionary()]);
   if (!isSupabaseConfigured()) return { title: t.lessonTitleFallback };
   try {
     const lesson = await getPublishedLessonBySlug(slug);
-    return lesson
-      ? { title: lesson.title, description: lesson.description ?? undefined }
-      : { title: t.lessonNotFoundTitle };
+    if (!lesson) return { title: t.lessonNotFoundTitle, robots: { index: false } };
+    const description = lesson.description ?? t.seo.lessonDescription;
+    return {
+      title: lesson.title,
+      description,
+      alternates: alternatesFor(locale, `/l/${lesson.slug}`),
+      openGraph: {
+        ...ogBase(locale),
+        type: "article",
+        title: lesson.title,
+        description,
+        url: `/${locale}/l/${lesson.slug}`,
+        publishedTime: lesson.created_at,
+        modifiedTime: lesson.updated_at,
+        tags: lesson.topic ? [lesson.topic] : undefined,
+      },
+    };
   } catch {
     return { title: t.lessonTitleFallback };
   }
@@ -29,8 +44,37 @@ async function Lesson({ params }: { params: PageProps<"/[lang]/l/[slug]">["param
   if (!lesson) notFound();
 
   const src = `/raw/${encodeURIComponent(lesson.slug)}`;
+  const url = `${siteUrl()}/${locale}/l/${lesson.slug}`;
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={jsonLd({
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "LearningResource",
+              name: lesson.title,
+              description: lesson.description ?? t.seo.lessonDescription,
+              url,
+              learningResourceType: "Lesson",
+              about: lesson.topic ?? undefined,
+              teaches: "German language",
+              isAccessibleForFree: true,
+              datePublished: lesson.created_at,
+              dateModified: lesson.updated_at,
+              inLanguage: "de",
+            },
+            {
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                { "@type": "ListItem", position: 1, name: common.allLessons, item: `${siteUrl()}/${locale}` },
+                { "@type": "ListItem", position: 2, name: lesson.title, item: url },
+              ],
+            },
+          ],
+        })}
+      />
       <h1 className="font-display text-4xl leading-[1.02] font-extrabold tracking-tight [overflow-wrap:anywhere] sm:text-5xl">
         {lesson.title}
       </h1>

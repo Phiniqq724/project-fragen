@@ -3,6 +3,7 @@ import { GridBackdrop } from "@/components/ui/grid-backdrop";
 import { I18nProvider } from "@/components/i18n/provider";
 import { locales } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionary";
+import { ogLocales, siteUrl } from "@/lib/seo";
 import "../globals.css";
 
 // Fonts come from Fontshare only (owner decision): Cabinet Grotesk for display, Switzer for text.
@@ -14,10 +15,20 @@ export function generateStaticParams() {
 }
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { common } = await getDictionary();
+  const { common, locale } = await getDictionary();
   return {
+    metadataBase: new URL(siteUrl()),
+    applicationName: "Fragen",
     title: { default: "Fragen", template: "%s · Fragen" },
     description: common.tagline,
+    openGraph: {
+      type: "website",
+      siteName: "Fragen",
+      locale: ogLocales[locale],
+      alternateLocale: locales.filter((l) => l !== locale).map((l) => ogLocales[l]),
+    },
+    twitter: { card: "summary_large_image" },
+    formatDetection: { telephone: false, email: false, address: false },
   };
 }
 

@@ -42,9 +42,6 @@ export default async function LoginPage() {
             </p>
           </Notice>
         )}
-        <p className="mt-6 text-sm text-ink-muted">
-          {t.note}
-        </p>
       </div>
     </SiteShell>
   );

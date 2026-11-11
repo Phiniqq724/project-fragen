@@ -18,4 +18,8 @@ Stack: Next.js 16 (App Router, Cache Components), Supabase (Postgres, Storage, A
 
 ## Deploy (Vercel)
 
-Import the repository, add the two environment variables from `.env.example` (`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`), and deploy. No other configuration is needed.
+Import the repository, add the two environment variables from `.env.example` (`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`), and deploy. If you add a custom domain, also set `NEXT_PUBLIC_SITE_URL` so canonical links, the sitemap and share images use it.
+
+## SEO
+
+Per-language titles and descriptions, canonical + hreflang links, Open Graph / Twitter cards (a generated share image per lesson, so links pasted in chat groups show the lesson title), JSON-LD (`WebSite`, `LearningResource`, `BreadcrumbList`), `sitemap.xml`, `robots.txt` (teacher pages excluded) and a web manifest. Raw lesson files send `X-Robots-Tag: noindex`.
